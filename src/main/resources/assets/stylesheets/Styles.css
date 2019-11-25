@@ -1,14 +1,13 @@
 *
 {
-    TITLE_LABEL_PADDING_BOTTOM: 10;
     -fx-font-family: "Comic Sans MS";
-    -fx-font-size: 14px;
+    -fx-font-size: 16;
 }
 
 Label.Title
 {
-    -fx-font-size: 48px;
-    -fx-padding: 0 0 25 0;
+    -fx-font-size: 12;
+    -fx-spacing: 0 0 25 0;
 }
 .Bold
 {

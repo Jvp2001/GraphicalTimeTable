@@ -20,6 +20,7 @@ class Main : Application()
         timeTableVBox.isFillWidth = true
         scene.stylesheets += "assets/stylesheets/Styles.css"
         primaryStage?.scene = scene
+        primaryStage?.title = "Time Table Application"
         primaryStage?.show()
     }
 

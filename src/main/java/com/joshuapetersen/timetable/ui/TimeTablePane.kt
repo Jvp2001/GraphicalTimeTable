@@ -8,6 +8,8 @@ import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.layout.*
+import javafx.scene.text.TextAlignment
+import java.time.DayOfWeek
 
 
 class TimeTablePane : GridPane()
@@ -15,8 +17,8 @@ class TimeTablePane : GridPane()
 
     private val imageSize = object
     {
-        val width = 125.0
-        val height = 125.0
+        val width = 75.0
+        val height = 75.0
     }
     private val headers: ArrayList<PeriodInfoCell> = arrayListOf(
         PeriodInfoCell(
@@ -44,34 +46,60 @@ class TimeTablePane : GridPane()
 
         padding = Insets(10.0, 10.0, 10.0, 10.0)
 
+        populateGrid()
+
+    }
+
+    private fun createHeaderRow()
+    {
         for ((index, header) in headers.withIndex())
         {
-            addColumn(index, header)
-        }
-        add(createDayLabel(), 0, 1)
-        for(i in 1..10)
-        {
-            addSubject(i)
+            addColumn(index+1, header)
         }
     }
 
-    private fun createDayLabel(): Label
+    private fun createDayLabel(day: String): Label
     {
-        val label = Label("Monday")
-        label.alignment = Pos.CENTER
+        val label = Label(day)
+
+        label.textAlignment = TextAlignment.CENTER
         return label
     }
 
-    fun addSubject(columnIndex: Int)
+    fun addSubject(rowIndex: Int, columnIndex: Int)
     {
-        add(createLessonCell(), columnIndex, 1)
+        add(createLessonCell(), columnIndex, rowIndex)
     }
 
     fun createLessonCell(): LessonCell =
         LessonCell(
-            Image(imageRefMap["Maths"], 150.0, 150.0, true, true),
+            Image(imageRefMap["Maths"], imageSize.width, imageSize.height, true, true),
             TimeTableData.findLessonForDay("Monday")[1]
         )
+
+    fun createWeekColumn()
+    {
+        for ((index, i) in arrayListOf("Monday","Tuesday","Wednesday","Thursday","Friday").withIndex())
+        {
+            add(createDayLabel(i), 0,index+1)
+        }
+    }
+
+    fun populateGrid()
+    {
+        addColumn(0,Label("Weekday"))
+        createHeaderRow()
+        createWeekColumn()
+        var row = 1
+        while(row <= 5)
+        {
+            for (i in 1..11)
+            {
+                addSubject(row, i);
+            }
+            row++
+        }
+    }
 
     fun createImage(subjectName: String): Image =
         Image(imageRefMap[subjectName], imageSize.width, imageSize.height, true, true)
