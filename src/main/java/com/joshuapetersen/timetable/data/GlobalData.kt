@@ -1,3 +1,15 @@
 package com.joshuapetersen.timetable.data
 
-val imageRefMap = mapOf<String,String>(Pair("Maths","assets/images/subjects/maths.jpg"))
+class GlobalData
+{
+    companion object
+    {
+        class Images constructor()
+        {
+            companion object
+            {
+                val subjectImagesMap = mapOf<String, String>(Pair("Maths", "assets/images/subjects/maths.jpg"))
+            }
+        }
+    }
+}

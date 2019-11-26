@@ -40,6 +40,19 @@ class TimeTableData()
 //            lessons.sort()
             return lessons
         }
+        fun findLessonForDay(day:String, periodName:String = "1") : Lesson?
+        {
+            val lessons: ArrayList<Lesson> = arrayListOf()
+            for (lesson in studentLessons!!)
+            {
+                if(lesson.day.equals(day,ignoreCase = true) && lesson.periodName == periodName)
+                {
+                    return lesson;
+                }
+            }
+//            lessons.sort()
+            return null
+        }
     }
 
     init
