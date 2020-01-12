@@ -31,6 +31,11 @@
             <artifactId>poiji</artifactId>
             <version>LATEST</version>
         </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>klaxon</artifactId>
+            <version>5.0.12</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -38,7 +43,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**</include>
+                    <include>*</include>
                 </includes>
             </resource>
         </resources>

@@ -2,14 +2,12 @@ package com.joshuapetersen.timetable.ui
 
 import com.joshuapetersen.timetable.data.Lesson
 import com.joshuapetersen.timetable.data.TimeTableData
-import com.joshuapetersen.timetable.data.imageRefMap
+import com.joshuapetersen.timetable.data.GlobalData.Companion.Images.Companion.subjectImagesMap
 import javafx.geometry.Insets
-import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.layout.*
 import javafx.scene.text.TextAlignment
-import java.time.DayOfWeek
 
 
 class TimeTablePane : GridPane()
@@ -54,7 +52,7 @@ class TimeTablePane : GridPane()
     {
         for ((index, header) in headers.withIndex())
         {
-            addColumn(index+1, header)
+            addColumn(index + 1, header)
         }
     }
 
@@ -68,40 +66,62 @@ class TimeTablePane : GridPane()
 
     fun addSubject(rowIndex: Int, columnIndex: Int)
     {
-        add(createLessonCell(), columnIndex, rowIndex)
+        add(createLessonCell(columnIndex), columnIndex, rowIndex)
     }
 
-    fun createLessonCell(): LessonCell =
-        LessonCell(
-            Image(imageRefMap["Maths"], imageSize.width, imageSize.height, true, true),
-            TimeTableData.findLessonForDay("Monday")[1]
+    fun createLessonCell(index: Int): LessonCell
+    {
+        val lesson = TimeTableData.student?.lessons!![index]
+        return LessonCell(
+            Image(
+                TimeTableData.retrieveImagePathFromClassID(lesson!!.groupInfo!!.classID),
+                imageSize.width,
+                imageSize.height,
+                true,
+                true
+            ),
+            lesson.groupInfo
         )
+
+    }
 
     fun createWeekColumn()
     {
-        for ((index, i) in arrayListOf("Monday","Tuesday","Wednesday","Thursday","Friday").withIndex())
+        for ((index, i) in arrayListOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday").withIndex())
         {
-            add(createDayLabel(i), 0,index+1)
+            add(createDayLabel(i), 0, index + 1)
         }
     }
 
     fun populateGrid()
     {
-        addColumn(0,Label("Weekday"))
+        addColumn(0, Label("Weekday"))
         createHeaderRow()
         createWeekColumn()
         var row = 1
-        while(row <= 5)
+        while (row <= 5)
         {
             for (i in 1..11)
             {
-                addSubject(row, i);
+                val lesson = TimeTableData.student?.lessons?.get(i)
+                add(
+                    LessonCell(
+                        Image(
+                            TimeTableData.retrieveImagePathFromClassID(lesson!!.groupInfo.classID),
+                            imageSize.width,
+                            imageSize.height,
+                            true,
+                            true
+                        ), lesson!!.groupInfo
+                    ),
+                    i, row
+                )
             }
             row++
         }
     }
 
     fun createImage(subjectName: String): Image =
-        Image(imageRefMap[subjectName], imageSize.width, imageSize.height, true, true)
+        Image(subjectImagesMap[subjectName], imageSize.width, imageSize.height, true, true)
 
 }

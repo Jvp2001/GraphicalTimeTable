@@ -16,7 +16,7 @@ class TimeTableVBox : VBox(7.0)
 
         setVgrow(timeTablePane,Priority.ALWAYS)
         timeTablePane.setMinSize(this.minWidth,this.minHeight)
-        val titleLabel = Label(TimeTableData.studentLessons!![0].pupilName)
+        val titleLabel = Label(TimeTableData.student!!.lessons[0].name)
         titleLabel.styleClass += "Title"
         titleLabel.styleClass += "Bold"
         titleLabel.maxWidth = Double.MAX_VALUE

@@ -2,14 +2,13 @@ package com.joshuapetersen.timetable.data
 
 import com.poiji.annotation.ExcelCell
 import com.poiji.annotation.ExcelCellName
-import com.poiji.annotation.ExcelSheet
-import java.awt.SystemColor.info
+
 class Lesson : Comparable<Lesson>
 {
-    @ExcelCell(0)
+    @ExcelCell(0 )
     var year: Int? = null
     @ExcelCell(1)
-    var className: String? = null
+    var tutorID: String? = null
     @ExcelCell(2)
     var pupilName: String? = null
     @ExcelCell(3)
@@ -69,7 +68,7 @@ class Lesson : Comparable<Lesson>
 
     override fun toString(): String
     {
-        return "Lesson(year=$year, className=$className, pupilName=$pupilName, day=$day, periodName=$periodName, week=$week, groupInfo=$groupInfo, subData=$subData, classID='$classID', teachersInitials='$teachersInitials', roomID='$roomID')"
+        return "Lesson(year=$year, className=$tutorID, pupilName=$pupilName, day=$day, periodName=$periodName, week=$week, groupInfo=$groupInfo, subData=$subData, classID='$classID', teachersInitials='$teachersInitials', roomID='$roomID')"
     }
 
 

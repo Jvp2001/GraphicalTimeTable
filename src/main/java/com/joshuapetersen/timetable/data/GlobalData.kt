@@ -8,7 +8,8 @@ class GlobalData
         {
             companion object
             {
-                val subjectImagesMap = mapOf<String, String>(Pair("Maths", "assets/images/subjects/maths.jpg"))
+                val subjectImagesMap = mapOf(Pair("Maths", "" +
+                        "file:assets\\images\\subjects\\maths.jpg"))
             }
         }
     }
