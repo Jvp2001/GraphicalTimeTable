@@ -8,6 +8,10 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.text.TextAlignment
 
+infix fun String.startWith(other:String) : Boolean
+{
+    return this.startsWith(this)
+}
 class TimeTableVBox : VBox(7.0)
 {
     init
@@ -16,11 +20,13 @@ class TimeTableVBox : VBox(7.0)
 
         setVgrow(timeTablePane,Priority.ALWAYS)
         timeTablePane.setMinSize(this.minWidth,this.minHeight)
-        val titleLabel = Label(TimeTableData.student!!.lessons[0].name)
+        val titleLabel = Label(TimeTableData.student!!.name)
         titleLabel.styleClass += "Title"
         titleLabel.styleClass += "Bold"
         titleLabel.maxWidth = Double.MAX_VALUE
-        titleLabel.alignment = Pos.CENTER
+          titleLabel.alignment = Pos.CENTER
+        titleLabel.maxWidth += 10
         children.setAll(titleLabel,timeTablePane)
+
     }
 }

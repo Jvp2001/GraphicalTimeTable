@@ -18,5 +18,6 @@ class LessonCell(image: Image, groupInfo: GroupInfo?) : VBox(5.0)
         val vBox = VBox(Label(groupInfo?.classID), Label(groupInfo?.teacherInitials), Label(groupInfo?.roomID))
         vBox.alignment = Pos.CENTER
         children.setAll(ImageView(image), vBox)
+
     }
 }

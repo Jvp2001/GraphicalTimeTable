@@ -31,11 +31,7 @@
             <artifactId>poiji</artifactId>
             <version>LATEST</version>
         </dependency>
-        <dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>klaxon</artifactId>
-            <version>5.0.12</version>
-        </dependency>
+
     </dependencies>
 
     <build>

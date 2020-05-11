@@ -50,8 +50,7 @@ class TimeTablePane : GridPane()
 
     private fun createHeaderRow()
     {
-        for ((index, header) in headers.withIndex())
-        {
+        headers.withIndex().forEach { (index, header) ->
             addColumn(index + 1, header)
         }
     }
@@ -64,27 +63,6 @@ class TimeTablePane : GridPane()
         return label
     }
 
-    fun addSubject(rowIndex: Int, columnIndex: Int)
-    {
-        add(createLessonCell(columnIndex), columnIndex, rowIndex)
-    }
-
-    fun createLessonCell(index: Int): LessonCell
-    {
-        val lesson = TimeTableData.student?.lessons!![index]
-        return LessonCell(
-            Image(
-                TimeTableData.retrieveImagePathFromClassID(lesson!!.groupInfo!!.classID),
-                imageSize.width,
-                imageSize.height,
-                true,
-                true
-            ),
-            lesson.groupInfo
-        )
-
-    }
-
     fun createWeekColumn()
     {
         for ((index, i) in arrayListOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday").withIndex())
@@ -93,7 +71,7 @@ class TimeTablePane : GridPane()
         }
     }
 
-    fun populateGrid()
+    private fun populateGrid()
     {
         addColumn(0, Label("Weekday"))
         createHeaderRow()
@@ -101,22 +79,21 @@ class TimeTablePane : GridPane()
         var row = 1
         while (row <= 5)
         {
-            for (i in 1..11)
-            {
-                val lesson = TimeTableData.student?.lessons?.get(i)
-                add(
-                    LessonCell(
-                        Image(
-                            TimeTableData.retrieveImagePathFromClassID(lesson!!.groupInfo.classID),
-                            imageSize.width,
-                            imageSize.height,
-                            true,
-                            true
-                        ), lesson!!.groupInfo
-                    ),
-                    i, row
-                )
-            }
+            (1..11).forEach { i ->
+                    val lesson = TimeTableData.student?.lessons?.get(i)
+                    add(
+                        LessonCell(
+                            Image(
+                                TimeTableData.findSubjectImagePath(lesson!!.groupInfo.classID.split( " ")[1]) ,
+                                imageSize.width,
+                                imageSize.height,
+                                true,
+                                true
+                            ), lesson!!.groupInfo
+                        ),
+                        i, row
+                    )
+                }
             row++
         }
     }

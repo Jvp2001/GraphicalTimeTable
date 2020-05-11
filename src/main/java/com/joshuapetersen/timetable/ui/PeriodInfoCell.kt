@@ -12,7 +12,8 @@ class PeriodInfoCell(periodName:String,lessonTime:String) : VBox(5.0)
 {
     init
     {
-        val data = arrayListOf(periodName,lessonTime.split("-")[0],lessonTime.split("-")[1])
+        var lessonTimes = lessonTime.split("-")
+        val data = arrayListOf(periodName,lessonTimes[0],lessonTimes[1])
         this.alignment = Pos.CENTER
         for (datum in data)
         {

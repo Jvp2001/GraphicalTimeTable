@@ -12,6 +12,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileReader
+import java.io.FilenameFilter
+import java.nio.file.Paths
 import com.joshuapetersen.timetable.data.ImageReference as ImageReference
 
 private data class StudentJsonFile(val fileName: String, val data: JSONObject)
@@ -20,6 +22,7 @@ private data class WorkbookInfo(var lessons: MutableList<MutableList<Lesson>>? =
     init
     {
     }
+
     val workbook = XSSFWorkbook(file)
     val path: String = file!!.absolutePath
     val numberOfSheets = workbook.numberOfSheets
@@ -78,7 +81,7 @@ object TimeTableData
             for (file in files)
             {
                 LOG(file)
-                workbooks.add(WorkbookInfo(null,file))
+                workbooks.add(WorkbookInfo(null, file))
             }
             LOG(workbooks.size)
             return workbooks.toTypedArray()
@@ -120,7 +123,7 @@ object TimeTableData
 
         val jsonDataFolder = File(Utils.assetsDir, "data/json/worksheets")
         //TODO: change to check to see if the number of json files is equal to the number of workbook pages.
-        if (jsonDataFolder.listFiles()?.size!! ==workbooks [0].numberOfSheets)
+        if (jsonDataFolder.listFiles()?.size!! == workbooks[0].numberOfSheets)
         {
             //TODO: Deserialize json
             student = Klaxon().parse<StudentInfo>(FileReader(jsonDataFolder.listFiles()[0]))
@@ -152,31 +155,21 @@ object TimeTableData
 
     }
 
-    fun retrieveImagePathFromClassID(classID: String): String?
-    {
-        var path: String = ""
-        for (image in imagesReferences!!.iterator())
-        {
-            if (classID.contains(image.subjectID))
-            {
-                path = "file:/"+findSubjectImagePath(image.subjectName)!!
-                image.imagePath = path
-                LOG("Path: " + path)
-                break
-            }
-        }
-        return path
-    }
 
-    private fun findSubjectImagePath(name: String): String?
+    fun findSubjectImagePath(id: String): String?
     {
-        val imageDir = File("assets/images/subjects")
-        for (image in imageDir.listFiles())
-        {
-            if (image.nameWithoutExtension.equals(name, true))
-                return image.path
-        }
-        return null
+        val imageDir = Paths.get(Utils.imagesDir, "subjects").toFile()
+        var imagePath = "file:///"
+        val images = imageDir.listFiles()
+        if (id.toLowerCase() == "ac")
+            imagePath += imageDir.listFiles({ dir, name -> name.toLowerCase().startsWith("assembly") })[0].toPath().toString()
+        else
+            for (image in images)
+            {
+                if (image.nameWithoutExtension.contains(id, true))
+                    imagePath += image.path
+            }
+        return imagePath
     }
 
     fun findLessonForDay(day: String, studentIndex: Int = 0): ArrayList<Lesson>
@@ -212,14 +205,13 @@ object TimeTableData
 
         val jsonObjects = arrayListOf<StudentJsonFile>()
 
+
         studentLessons?.iterator()!!.forEach { worksheet ->
-            for (lesson in worksheet)
-            {
+            worksheet.forEach { lesson ->
                 var lessons: JSONArray = JSONArray()
                 var storedCommonInfo: Boolean = false
                 var root = JSONObject()
-                for (lesson in worksheet)
-                {
+                worksheet.forEach { lesson ->
                     if (!storedCommonInfo)
                     {
                         root.put("year", lesson.year)
@@ -237,7 +229,7 @@ object TimeTableData
                         val groupInfoObject = JSONObject()
                         groupInfoObject.put("teacher_initials", lesson.teachersInitials)
                         groupInfoObject.put("class_id", lesson.classID)
-//                        groupInfoObject.put("lesson_id", lesson.lessonID)
+                        //                        groupInfoObject.put("lesson_id", lesson.lessonID)
                         groupInfoObject.put("room_id", lesson.roomID)
                         groupInfoObject.put("lesson_time", lesson.lessonTime)
                         lessonObject.put("group_info", groupInfoObject)
@@ -269,7 +261,9 @@ object TimeTableData
         for (subject in subjects)
         {
             var imageReference: ImageReference? = null
-            if(subject.toLowerCase() == "assembly")  imageReference = ImageReference("ac",subject) else imageReference = ImageReference(subject.substring(0, 2).toLowerCase(), subject)
+            if (subject.toLowerCase() == "assembly") imageReference =
+                ImageReference("ac", subject) else imageReference =
+                ImageReference(subject.substring(0, 2).toLowerCase(), subject)
             irs += imageReference
         }
         imagesReferences = irs

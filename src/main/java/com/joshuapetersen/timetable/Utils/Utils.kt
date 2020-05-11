@@ -2,6 +2,7 @@ package com.joshuapetersen.timetable.Utils
 
 import java.io.File
 import java.lang.management.ManagementFactory
+import java.nio.file.Paths
 
 
 class Utils
@@ -9,25 +10,11 @@ class Utils
     companion object
     {
         val userDir = File("").canonicalPath.toString()
-        val assetsDir = userDir+"\\assets"
+        val assetsDir = Paths.get(userDir,"assets").toAbsolutePath().toString()
+        val imagesDir = Paths.get(assetsDir, "images").toAbsolutePath().toString()
+
         val DAYS: ArrayList<String> = arrayListOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-        val imagesMap:HashMap<String, File> = hashMapOf(
-            Pair("Ma",File("D:\\Users\\mirro\\Documents\\Projects\\Kotlin\\TimeTable\\src\\main\\resources\\assets\\images\\maths.jpg")),
-            Pair("Ac",
-                File("D:\\Users\\mirro\\Documents\\Projects\\Kotlin\\TimeTable\\src\\main\\resources\\assets\\images\\Assembly.gif")
-            )
-        )
 
-        fun findImage(classID:String) : File?
-        {
-            for (entry in imagesMap)
-            {
-                if(classID.contains(entry.key))
-                    return entry.value
-
-            }
-            return null
-        }
     }
 }
 
